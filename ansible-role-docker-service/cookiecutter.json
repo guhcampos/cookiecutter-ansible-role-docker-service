@@ -1,0 +1,5 @@
+{
+    "project_name": "Ansible Role Docker Service",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+    "author": "Gustavo Campos <guhcampos@gmail.com>"
+}
