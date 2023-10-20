@@ -1,0 +1,64 @@
+---
+- name: "ensure group exists"
+  ansible.builtin.group:
+    name: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
+    state: present
+  register: transmission_group_results
+
+- name: "create user"
+  ansible.builtin.user:
+    name: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_name{%raw%}}}{%endraw%}"
+    state: present
+    uid: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_id{%raw%}}}{%endraw%}"
+    group: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
+    shell: /usr/sbin/nologin
+    create_home: false
+
+- name: "create service home"
+  ansible.builtin.file:
+    state: directory
+    path: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}"
+    owner: root
+    group: root
+    mode: 0755
+  notify: "restart {{cookiecutter.service_full_name}}"
+
+- name: template docker-compose
+  ansible.builtin.template:
+    src: "docker-compose.yaml.j2"
+    dest: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}/docker-compose.yaml"
+    owner: root
+    group: root
+    mode: 640
+  notify: "restart {{cookiecutter.service_full_name}}"
+
+- name: "create config dir"
+  ansible.builtin.file:
+    state: directory
+    path: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_config_home{%raw%}}}{%endraw%}"
+    owner: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_name{%raw%}}}{%endraw%}"
+    group: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
+    mode: 0750
+    recurse: true
+  notify: "restart {{cookiecutter.service_full_name}}"
+
+- name: template systemd service
+  ansible.builtin.template:
+    src: {{cookiecutter.service_full_name}}.service.j2
+    dest: /lib/systemd/system/{{cookiecutter.service_full_name}}.service
+  notify: "restart {{cookiecutter.service_full_name}}"
+
+- name: enable and start {{cookiecutter.service_full_name}}
+  ansible.builtin.systemd_service:
+    name: {{cookiecutter.service_full_name}}
+    daemon_reload: true
+    enabled: true
+    masked: no
+    state: started
+  async: 60
+  poll: 5
+
+{% if cookiecutter.nginx_enabled -%}
+- ansible.builtin.include_tasks: "_nginx.yaml"
+  tags: [nginx]
+{%- endif %}

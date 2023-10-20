@@ -1,0 +1,8 @@
+---
+{% if cookiecutter.nginx_enabled %}
+dependencies:
+  - role: guhcampos.docker-nginx
+    tags: [nginx]
+{% else -%}
+dependencies: []
+{%- endif %}

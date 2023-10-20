@@ -1,5 +1,46 @@
 {
-    "project_name": "Ansible Role Docker Service",
-    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
-    "author": "Gustavo Campos <guhcampos@gmail.com>"
+    "author": "Gustavo Campos <guhcampos@gmail.com>",
+    "service_name": "__service__",
+
+    "service_full_name": "docker-{{cookiecutter.service_name}}",
+    "service_home": "/opt/{{cookiecutter.service_full_name}}",
+
+    "role_namespace": "guhcampos",
+    "role_name": "docker-{{cookiecutter.service_name}}",
+    "role_full_name": "{{cookiecutter.role_namespace}}.{{cookiecutter.role_name}}",
+    "unix_group_name": "{{cookiecutter.service_name}}",
+    "unix_user_name": "{{cookiecutter.service_name}}",
+    "http_port": 0,
+    "nginx_enabled": false,
+    "nginx_proxy_type": "subdomain",
+    "nginx_ssl_enabled": true,
+    "unix_group_id": 0,
+    "unix_umask": 0,
+    "unix_user_id": 0,
+    "docker_cap_net_admin": false,
+    "docker_repo": "docker.io/busybox",
+    "docker_tag": "latest",
+    "docker_cpu_limit": "1",
+    "docker_mem_limit": "1g",
+    "docker_env": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
+    "docker_ports": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
+    "docker_volumes": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    }
 }
