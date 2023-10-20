@@ -1,46 +1,69 @@
+{%- macro vin() %}{%raw%}{{{%endraw%}{%endmacro-%}
+{%- macro vout() %}{%raw%}}}{%endraw%}{%endmacro-%}
+
+
+{%- macro var(name) -%}
+{{ '{{' }}{{ name }}{{ '}}' }}
+{%- endmacro -%}
+
 ---
-{{cookiecutter.service_name}}_config_home: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}/config"
+{{cookiecutter.service_name}}_config_home: "{{vin()}}{{cookiecutter.service_name}}_home{{vout()}}/config"
 {{cookiecutter.service_name}}_docker_cpu_limit: "{{cookiecutter.docker_cpu_limit}}"
-{{cookiecutter.service_name}}_docker_image: "{{cookiecutter.docker_repo}}:{{cookiecutter.docker_tag}}"
+{{cookiecutter.service_name}}_docker_image: "{{ var(cookiecutter.service_name+"_docker_repo") }}:{{ var(cookiecutter.service_name+"_docker_tag") }}"
 {{cookiecutter.service_name}}_docker_mem_limit: "{{cookiecutter.docker_mem_limit}}"
 {{cookiecutter.service_name}}_docker_network_name: "{{cookiecutter.service_name}}"
 {{cookiecutter.service_name}}_docker_repo: "{{cookiecutter.docker_repo}}"
 {{cookiecutter.service_name}}_docker_tag: "{{cookiecutter.docker_tag}}"
 {{cookiecutter.service_name}}_home: "/opt/{{cookiecutter.service_full_name}}"
-{{cookiecutter.service_name}}_unix_group_id: "{{cookiecutter.unix_group_id}}"
-{{cookiecutter.service_name}}_unix_group_name: "{{cookiecutter.unix_group_name}}"
-{{cookiecutter.service_name}}_unix_user_id: "{{cookiecutter.unix_user_id}}"
+{% if cookiecutter.http_port != "" %}
+{{cookiecutter.service_name}}_nginx_http_port: {{cookiecutter.http_port}}
+{% endif %}
+{% if cookiecutter.https_port != "" %}
+{{cookiecutter.service_name}}_nginx_https_port: {{cookiecutter.https_port}}
+{% endif %}
+{% if cookiecutter.nginx_enabled %}
+{{cookiecutter.service_name}}_nginx_server_name: "{{cookiecutter.service_name}}.*"
+{% endif %}
+{{cookiecutter.service_name}}_unix_group_id: "{{ var(cookiecutter.service_name+"_unix_user_id") }}"
+{{cookiecutter.service_name}}_unix_group_name: "{{ var(cookiecutter.service_name+"_unix_user_name") }}"
+{{cookiecutter.service_name}}_unix_user_id: {{cookiecutter.unix_user_id}}
 {{cookiecutter.service_name}}_unix_user_name: "{{cookiecutter.unix_user_name}}"
-{{cookiecutter.service_name}}_unix_umask: "{{cookiecutter.unix_umask}}"
+{{cookiecutter.service_name}}_unix_umask: {{cookiecutter.unix_umask}}
 
 # extra docker variables to set
 {{cookiecutter.service_name}}_docker_env:
 {%- if cookiecutter.docker_env._1 != "" %}
-{%- for _,var in  cookiecutter.docker_env.items() %}
-{%- if var != "" %}
+{% for _,var in  cookiecutter.docker_env.items() %}
+{% if var != "" %}
   {{var.key}}: "{{var.value}}"
-{%- endif %}
-{%- endfor %}
-{%- else %} {%raw%}{} {%endraw%}
-{%- endif %}
+{% endif %}
+{% endfor %}
+{% else %} {%raw%}{} {%endraw%}
+{% endif +%}
 
 # network ports to expose
 {{cookiecutter.service_name}}_docker_ports:
-{%- for name,port in  cookiecutter.docker_ports.items() %}
-{%- if port != "" %}
+{% if cookiecutter.http_port != "0" %}
+  - "{{ var(cookiecutter.service_name+"_nginx_http_port") }}:{{ var(cookiecutter.service_name+"_nginx_http_port") }}"
+{% endif %}
+{% if cookiecutter.https_port != "0" %}
+  - "{{ var(cookiecutter.service_name+"_nginx_https_port") }}:{{ var(cookiecutter.service_name+"_nginx_https_port") }}"
+{% endif %}
+{% for name,port in  cookiecutter.docker_ports.items() %}
+{% if port != "" %}
   - "{{port}}"
-{%- endif %}
-{%- endfor %}
+{% endif %}
+{% endfor %}
 
 # extra docker volumes to mount
 {{cookiecutter.service_name}}_docker_volumes:
-{%- for name,volume in  cookiecutter.docker_volumes.items() %}
-{%- if volume != "" %}
+{% for name,volume in  cookiecutter.docker_volumes.items() %}
+{% if volume != "" %}
   - "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}{{volume.src}}:{{volume.dst}}"
-{%- endif %}
-{%- endfor %}
+{% endif %}
+{% endfor %}
 
-{% if cookiecutter.nginx_enabled -%}
+{% if cookiecutter.nginx_enabled %}
 # nginx related
 nginx_proxy_config_home: "/opt/docker-nginx"
 {% endif %}

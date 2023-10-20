@@ -19,7 +19,7 @@
     state: directory
     path: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}"
     owner: root
-    group: root
+    group: adm
     mode: 0755
   notify: "restart {{cookiecutter.service_full_name}}"
 
@@ -28,9 +28,10 @@
     src: "docker-compose.yaml.j2"
     dest: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}/docker-compose.yaml"
     owner: root
-    group: root
-    mode: 640
+    group: adm
+    mode: 0640
   notify: "restart {{cookiecutter.service_full_name}}"
+  tags: [docker-compose]
 
 - name: "create config dir"
   ansible.builtin.file:
@@ -44,8 +45,8 @@
 
 - name: template systemd service
   ansible.builtin.template:
-    src: {{cookiecutter.service_full_name}}.service.j2
-    dest: /lib/systemd/system/{{cookiecutter.service_full_name}}.service
+    src: "{{cookiecutter.service_full_name}}.service.j2"
+    dest: "/lib/systemd/system/{{cookiecutter.service_full_name}}.service"
   notify: "restart {{cookiecutter.service_full_name}}"
 
 - name: enable and start {{cookiecutter.service_full_name}}
@@ -62,3 +63,10 @@
 - ansible.builtin.include_tasks: "_nginx.yaml"
   tags: [nginx]
 {%- endif %}
+
+{%- for _,task in cookiecutter.ansible_extra_tasks.items() %}
+{%- if task != "" %}
+- ansible.builtin.include_tasks: "{{task.file}}"
+  tags: {{task.tags}}
+{%- endif %}
+{%- endfor %}

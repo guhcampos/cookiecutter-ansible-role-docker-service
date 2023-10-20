@@ -11,6 +11,7 @@
     "unix_group_name": "{{cookiecutter.service_name}}",
     "unix_user_name": "{{cookiecutter.service_name}}",
     "http_port": 0,
+    "https_port": 0,
     "nginx_enabled": false,
     "nginx_proxy_type": "subdomain",
     "nginx_ssl_enabled": true,
@@ -42,5 +43,17 @@
         "_3": "",
         "_4": "",
         "_5": ""
+    },
+    "ansible_extra_tasks": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
+
+    "_jinja2_env_vars": {
+        "lstrip_blocks": true,
+        "trim_blocks": true
     }
 }

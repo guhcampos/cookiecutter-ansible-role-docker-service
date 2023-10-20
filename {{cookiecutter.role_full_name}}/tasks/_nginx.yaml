@@ -3,3 +3,4 @@
     src: "{{cookiecutter.service_full_name}}.nginx.{{cookiecutter.nginx_proxy_type}}.conf.j2"
     dest: "{%raw%}{{nginx_proxy_config_home}}{%endraw%}/{{cookiecutter.service_full_name}}.{{cookiecutter.nginx_proxy_type}}.conf"
   notify: restart docker-nginx
+  tags: [nginx]
