@@ -4,5 +4,3 @@
     name: "{{cookiecutter.service_full_name}}"
     daemon_reload: true
     state: restarted
-  tags: [handler]
-  when: "'handler' not in ansible_skip_tags"

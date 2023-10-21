@@ -1,13 +1,15 @@
-{%- macro vin() %}{%raw%}{{{%endraw%}{%endmacro-%}
-{%- macro vout() %}{%raw%}}}{%endraw%}{%endmacro-%}
-
-
 {%- macro var(name) -%}
 {{ '{{' }}{{ name }}{{ '}}' }}
 {%- endmacro -%}
 
 ---
-{{cookiecutter.service_name}}_config_home: "{{vin()}}{{cookiecutter.service_name}}_home{{vout()}}/config"
+{{cookiecutter.service_name}}_config_home: "{{ var(cookiecutter.service_name+"_home") }}/config"
+{% if cookiecutter.data_enabled %}
+{{cookiecutter.service_name}}_data_home: "{{ var(cookiecutter.service_name+"_home") }}/data"
+{% endif %}
+{% if cookiecutter.docker_command != "" %}
+{{cookiecutter.service_name}}_docker_command: "{{cookiecutter.docker_command}}"
+{% endif %}
 {{cookiecutter.service_name}}_docker_cpu_limit: "{{cookiecutter.docker_cpu_limit}}"
 {{cookiecutter.service_name}}_docker_image: "{{ var(cookiecutter.service_name+"_docker_repo") }}:{{ var(cookiecutter.service_name+"_docker_tag") }}"
 {{cookiecutter.service_name}}_docker_mem_limit: "{{cookiecutter.docker_mem_limit}}"
@@ -28,17 +30,17 @@
 {{cookiecutter.service_name}}_unix_group_name: "{{ var(cookiecutter.service_name+"_unix_user_name") }}"
 {{cookiecutter.service_name}}_unix_user_id: {{cookiecutter.unix_user_id}}
 {{cookiecutter.service_name}}_unix_user_name: "{{cookiecutter.unix_user_name}}"
-{{cookiecutter.service_name}}_unix_umask: {{cookiecutter.unix_umask}}
+{{cookiecutter.service_name}}_unix_umask: "{{cookiecutter.unix_umask}}"
 
 # extra docker variables to set
 {{cookiecutter.service_name}}_docker_env:
 {%- if cookiecutter.docker_env._1 != "" %}
 {% for _,var in  cookiecutter.docker_env.items() %}
-{% if var != "" %}
+{% if var != "" +%}
   {{var.key}}: "{{var.value}}"
-{% endif %}
+{%- endif %}
 {% endfor %}
-{% else %} {%raw%}{} {%endraw%}
+{% else %}{%raw%} {}{%endraw%}{# the space before {} is important #}
 {% endif +%}
 
 # network ports to expose
@@ -59,9 +61,12 @@
 {{cookiecutter.service_name}}_docker_volumes:
 {% for name,volume in  cookiecutter.docker_volumes.items() %}
 {% if volume != "" %}
-  - "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}{{volume.src}}:{{volume.dst}}"
+  - "{{volume.src}}:{{volume.dst}}"
 {% endif %}
 {% endfor %}
+
+{{cookiecutter.service_name}}_docker_volumes_extra: {}
+
 
 {% if cookiecutter.nginx_enabled %}
 # nginx related

@@ -1,3 +1,4 @@
+---
 - name: template nginx config
   ansible.builtin.template:
     src: "{{cookiecutter.service_full_name}}.nginx.{{cookiecutter.nginx_proxy_type}}.conf.j2"

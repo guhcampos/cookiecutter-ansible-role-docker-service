@@ -1,32 +1,38 @@
+{%- macro var(name) -%}
+{{ '{{' }}{{ name }}{{ '}}' }}
+{%- endmacro -%}
+
 ---
-- name: "ensure group exists"
+- name: "create service group"
   ansible.builtin.group:
-    name: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
+    name: "{{ var(cookiecutter.service_name+'_unix_group_name') }}"
+    gid: "{{ var(cookiecutter.service_name+'_unix_group_id') }}"
     state: present
   register: transmission_group_results
-
-- name: "create user"
-  ansible.builtin.user:
-    name: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_name{%raw%}}}{%endraw%}"
-    state: present
-    uid: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_id{%raw%}}}{%endraw%}"
-    group: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
-    shell: /usr/sbin/nologin
-    create_home: false
 
 - name: "create service home"
   ansible.builtin.file:
     state: directory
-    path: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}"
+    path: "{{ var(cookiecutter.service_name+'_home') }}"
     owner: root
     group: adm
     mode: 0755
   notify: "restart {{cookiecutter.service_full_name}}"
 
+- name: "create user"
+  ansible.builtin.user:
+    name: "{{ var(cookiecutter.service_name+'_unix_user_name') }}"
+    state: present
+    uid: "{{ var(cookiecutter.service_name+'_unix_user_id') }}"
+    group:  "{{ var(cookiecutter.service_name+'_unix_group_name') }}"
+    shell: /usr/sbin/nologin
+    home: "{{ var(cookiecutter.service_name+'_home') }}"
+    create_home: false
+
 - name: template docker-compose
   ansible.builtin.template:
     src: "docker-compose.yaml.j2"
-    dest: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_home{%raw%}}}{%endraw%}/docker-compose.yaml"
+    dest: "{{ var(cookiecutter.service_name+'_home') }}/docker-compose.yaml"
     owner: root
     group: adm
     mode: 0640
@@ -36,11 +42,10 @@
 - name: "create config dir"
   ansible.builtin.file:
     state: directory
-    path: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_config_home{%raw%}}}{%endraw%}"
-    owner: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_name{%raw%}}}{%endraw%}"
-    group: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_name{%raw%}}}{%endraw%}"
-    mode: 0750
-    recurse: true
+    path: "{{ var(cookiecutter.service_name+'_config_home') }}"
+    owner: "{{ var(cookiecutter.service_name+'_unix_user_name') }}"
+    group: "{{ var(cookiecutter.service_name+'_unix_group_name') }}"
+    mode: 0775
   notify: "restart {{cookiecutter.service_full_name}}"
 
 - name: template systemd service

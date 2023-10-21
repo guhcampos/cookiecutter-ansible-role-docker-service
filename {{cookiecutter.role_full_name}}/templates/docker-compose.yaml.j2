@@ -1,22 +1,26 @@
+{%- macro var(name) -%}
+{{ '{{' }}{{ name }}{{ '}}' }}
+{%- endmacro -%}
+
 ---
 services:
   {{cookiecutter.service_name}}:
     container_name: "{{cookiecutter.service_name}}"
-    image: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_docker_image{% raw %}}}{%endraw%}"
+    image: "{{ var(cookiecutter.service_name+"_docker_image") }}"
     restart: unless-stopped
 
     environment:
-      - PUID={%raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_user_id{%raw%}}}{%endraw+%}
-      - PGID={%+raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_group_id{%raw%}}}{%endraw+%}
-      - UMASK={%-raw%}{{{%endraw%}{{cookiecutter.service_name}}_unix_umask{%raw%}}}{%endraw+%}
-      {%+raw%}{% for key,value in  {%endraw%}{{cookiecutter.service_name}}_docker_env.items(){%raw%} -%}{%endraw%}
+      - PUID={{ var(cookiecutter.service_name+"_unix_user_id") }}
+      - PGID={{ var(cookiecutter.service_name+"_unix_group_id") }}
+      - UMASK={{ var(cookiecutter.service_name+"_unix_umask") }}
+      {%+raw%}{% for key,value in {%endraw%}{{cookiecutter.service_name}}_docker_env.items(){%raw%} -%}{%endraw%}
       {%raw%}
       - {{key}}={{value}}
       {% endfor +%}
       {%endraw%}
 
     ports:
-      {%+raw%}{% for port in  {%endraw%}{{cookiecutter.service_name}}_docker_ports{%raw%} -%}{%endraw%}
+      {%+raw%}{% for port in {%endraw%}{{cookiecutter.service_name}}_docker_ports{%raw%} -%}{%endraw%}
       {%raw%}
       {% if port != "" -%}
       - {{port}}
@@ -26,13 +30,21 @@ services:
 
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {%+raw%}{% for volume in  {%endraw%}{{cookiecutter.service_name}}_docker_volumes{%raw%} -%}{%endraw%}
+      {%+raw%}{% for volume in {%endraw%}{{cookiecutter.service_name}}_docker_volumes{%raw%} -%}{%endraw%}
       {%raw%}
       {% if volume != "" -%}
       - "{{volume}}"
       {% endif -%}
+      {%- endfor %}
+      {%endraw%}
+      {%raw%}{% for volume in {%endraw%}{{cookiecutter.service_name}}_docker_volumes_extra{%raw%} -%}{%endraw%}
+      {%raw%}
+      {% if volume != "" -%}
+      - "{{volume.src}}:{{volume.dst}}"
+      {% endif -%}
       {%- endfor +%}
       {%endraw%}
+
 
     {%- if cookiecutter.docker_cap_net_admin %}
     cap_add:
@@ -41,5 +53,5 @@ services:
 
 networks:
   default:
-    name: "{%raw%}{{{%endraw%}{{cookiecutter.service_name}}_docker_network_name{%raw%}}}{%endraw%}"
+    name: "{{ var(cookiecutter.service_name+"_docker_network_name") }}"
     external: true

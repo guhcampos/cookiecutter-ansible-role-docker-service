@@ -18,7 +18,9 @@
     "unix_group_id": 0,
     "unix_umask": 0,
     "unix_user_id": 0,
+    "data_enabled": false,
     "docker_cap_net_admin": false,
+    "docker_command": "",
     "docker_repo": "docker.io/busybox",
     "docker_tag": "latest",
     "docker_cpu_limit": "1",
@@ -28,7 +30,17 @@
         "_2": "",
         "_3": "",
         "_4": "",
-        "_5": ""
+        "_5": "",
+        "_6": "",
+        "_7": "",
+        "_8": "",
+        "_9": "",
+        "_10": "",
+        "_11": "",
+        "_12": "",
+        "_13": "",
+        "_14": "",
+        "_15": ""
     },
     "docker_ports": {
         "_1": "",
