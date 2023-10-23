@@ -70,8 +70,8 @@
 {%- endif %}
 
 {%- for _,task in cookiecutter.ansible_extra_tasks.items() %}
-{%- if task != "" %}
+{%- if task != "" +%}
 - ansible.builtin.include_tasks: "{{task.file}}"
   tags: {{task.tags}}
-{%- endif %}
-{%- endfor %}
+{% endif %}
+{% endfor %}
