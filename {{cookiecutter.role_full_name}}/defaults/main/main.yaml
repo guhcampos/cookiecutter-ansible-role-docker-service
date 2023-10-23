@@ -61,7 +61,7 @@
 {{cookiecutter.service_name}}_docker_volumes:
 {% for name,volume in  cookiecutter.docker_volumes.items() %}
 {% if volume != "" %}
-  - "{{volume.src}}:{{volume.dst}}"
+  - "{{ var(cookiecutter.service_name+"_home") }}/{{volume.src}}:{{volume.dst}}"
 {% endif %}
 {% endfor %}
 
