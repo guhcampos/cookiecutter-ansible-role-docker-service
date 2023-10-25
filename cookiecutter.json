@@ -1,30 +1,31 @@
 {
     "author": "Gustavo Campos <guhcampos@gmail.com>",
     "service_name": "__service__",
-
-    "service_full_name": "docker-{{cookiecutter.service_name}}",
-    "service_home": "/opt/{{cookiecutter.service_full_name}}",
-
     "role_namespace": "guhcampos",
-    "role_name": "docker-{{cookiecutter.service_name}}",
-    "role_full_name": "{{cookiecutter.role_namespace}}.{{cookiecutter.role_name}}",
-    "unix_group_name": "{{cookiecutter.service_name}}",
-    "unix_user_name": "{{cookiecutter.service_name}}",
-    "http_port": 0,
-    "https_port": 0,
-    "nginx_enabled": false,
-    "nginx_proxy_type": "subdomain",
-    "nginx_ssl_enabled": true,
-    "unix_group_id": 0,
-    "unix_umask": 0,
-    "unix_user_id": 0,
+    "_jinja2_env_vars": {
+        "lstrip_blocks": true,
+        "trim_blocks": true
+    },
+    "ansible_extra_tasks": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
     "data_enabled": false,
     "docker_cap_net_admin": false,
+    "docker_cap_sys_admin": false,
+    "docker_cap_sys_ptrace": false,
+    "docker_capabilities": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
     "docker_command": "",
-    "docker_repo": "docker.io/busybox",
-    "docker_tag": "latest",
     "docker_cpu_limit": "1",
-    "docker_mem_limit": "1g",
     "docker_env": {
         "_1": "",
         "_2": "",
@@ -42,6 +43,8 @@
         "_14": "",
         "_15": ""
     },
+    "docker_mem_limit": "1g",
+    "docker_network_name": "{{cookiecutter.service_name}}",
     "docker_ports": {
         "_1": "",
         "_2": "",
@@ -49,6 +52,8 @@
         "_4": "",
         "_5": ""
     },
+    "docker_repo": "docker.io/busybox",
+    "docker_tag": "latest",
     "docker_volumes": {
         "_1": "",
         "_2": "",
@@ -56,16 +61,19 @@
         "_4": "",
         "_5": ""
     },
-    "ansible_extra_tasks": {
-        "_1": "",
-        "_2": "",
-        "_3": "",
-        "_4": "",
-        "_5": ""
-    },
-
-    "_jinja2_env_vars": {
-        "lstrip_blocks": true,
-        "trim_blocks": true
-    }
+    "http_port": "<HTTP-PORT>",
+    "https_port": "<HTTPs-PORT>",
+    "nginx_enabled": false,
+    "nginx_proxy_type": "subdomain",
+    "nginx_ssl_enabled": true,
+    "role_name": "docker-{{cookiecutter.service_name}}",
+    "role_full_name": "{{cookiecutter.role_namespace}}.{{cookiecutter.role_name}}",
+    "service_full_name": "docker-{{cookiecutter.service_name}}",
+    "service_home": "/opt/{{cookiecutter.service_full_name}}",
+    "timezone": "Etc/UTC",
+    "unix_group_id": "<GID>",
+    "unix_group_name": "{{cookiecutter.service_name}}",
+    "unix_umask": "022",
+    "unix_user_id": "<UID>",
+    "unix_user_name": "{{cookiecutter.service_name}}"
 }

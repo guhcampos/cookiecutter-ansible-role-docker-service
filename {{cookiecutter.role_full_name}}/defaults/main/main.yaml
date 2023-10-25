@@ -13,7 +13,7 @@
 {{cookiecutter.service_name}}_docker_cpu_limit: "{{cookiecutter.docker_cpu_limit}}"
 {{cookiecutter.service_name}}_docker_image: "{{ var(cookiecutter.service_name+"_docker_repo") }}:{{ var(cookiecutter.service_name+"_docker_tag") }}"
 {{cookiecutter.service_name}}_docker_mem_limit: "{{cookiecutter.docker_mem_limit}}"
-{{cookiecutter.service_name}}_docker_network_name: "{{cookiecutter.service_name}}"
+{{cookiecutter.service_name}}_docker_network_name: "{{cookiecutter.docker_network_name}}"
 {{cookiecutter.service_name}}_docker_repo: "{{cookiecutter.docker_repo}}"
 {{cookiecutter.service_name}}_docker_tag: "{{cookiecutter.docker_tag}}"
 {{cookiecutter.service_name}}_home: "/opt/{{cookiecutter.service_full_name}}"
@@ -26,6 +26,8 @@
 {% if cookiecutter.nginx_enabled %}
 {{cookiecutter.service_name}}_nginx_server_name: "{{cookiecutter.service_name}}.*"
 {% endif %}
+
+{{cookiecutter.service_name}}_timezone: "{{ cookiecutter.timezone }}"
 {{cookiecutter.service_name}}_unix_group_id: "{{ var(cookiecutter.service_name+"_unix_user_id") }}"
 {{cookiecutter.service_name}}_unix_group_name: "{{ var(cookiecutter.service_name+"_unix_user_name") }}"
 {{cookiecutter.service_name}}_unix_user_id: {{cookiecutter.unix_user_id}}
@@ -66,9 +68,3 @@
 {% endfor %}
 
 {{cookiecutter.service_name}}_docker_volumes_extra: {}
-
-
-{% if cookiecutter.nginx_enabled %}
-# nginx related
-nginx_proxy_config_home: "/opt/docker-nginx"
-{% endif %}

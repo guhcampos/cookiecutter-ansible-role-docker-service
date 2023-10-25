@@ -13,6 +13,7 @@ services:
       - PUID={{ var(cookiecutter.service_name+"_unix_user_id") }}
       - PGID={{ var(cookiecutter.service_name+"_unix_group_id") }}
       - UMASK={{ var(cookiecutter.service_name+"_unix_umask") }}
+      - TZ={{ var(cookiecutter.service_name+"_timezone") }}
       {%+raw%}{% for key,value in {%endraw%}{{cookiecutter.service_name}}_docker_env.items(){%raw%} -%}{%endraw%}
       {%raw%}
       - {{key}}={{value}}
@@ -50,6 +51,7 @@ services:
     cap_add:
       - NET_ADMIN
     {% endif %}
+
 
 networks:
   default:
