@@ -14,9 +14,6 @@
         "_5": ""
     },
     "data_enabled": false,
-    "docker_cap_net_admin": false,
-    "docker_cap_sys_admin": false,
-    "docker_cap_sys_ptrace": false,
     "docker_capabilities": {
         "_1": "",
         "_2": "",
@@ -61,8 +58,8 @@
         "_4": "",
         "_5": ""
     },
-    "http_port": "<HTTP-PORT>",
-    "https_port": "<HTTPs-PORT>",
+    "http_port": "0",
+    "https_port": "0",
     "nginx_enabled": false,
     "nginx_proxy_type": "subdomain",
     "nginx_ssl_enabled": true,
@@ -73,7 +70,7 @@
     "timezone": "Etc/UTC",
     "unix_group_id": "<GID>",
     "unix_group_name": "{{cookiecutter.service_name}}",
-    "unix_umask": "022",
+    "unix_umask": "027",
     "unix_user_id": "<UID>",
     "unix_user_name": "{{cookiecutter.service_name}}"
 }

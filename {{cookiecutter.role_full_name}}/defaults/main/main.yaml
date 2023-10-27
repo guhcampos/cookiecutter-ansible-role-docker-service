@@ -37,7 +37,7 @@
 # extra docker variables to set
 {{cookiecutter.service_name}}_docker_env:
 {%- if cookiecutter.docker_env._1 != "" %}
-{% for _,var in  cookiecutter.docker_env.items() %}
+{% for _,var in cookiecutter.docker_env.items() %}
 {% if var != "" +%}
   {{var.key}}: "{{var.value}}"
 {%- endif %}
@@ -61,7 +61,7 @@
 
 # extra docker volumes to mount
 {{cookiecutter.service_name}}_docker_volumes:
-{% for name,volume in  cookiecutter.docker_volumes.items() %}
+{% for name,volume in cookiecutter.docker_volumes.items() %}
 {% if volume != "" %}
   - "{{volume.src}}:{{volume.dst}}"
 {% endif %}

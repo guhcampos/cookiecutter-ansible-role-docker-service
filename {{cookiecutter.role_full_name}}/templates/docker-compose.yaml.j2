@@ -20,6 +20,7 @@ services:
       {% endfor +%}
       {%endraw%}
 
+    {% if cookiecutter.docker_network_name != "host" %}
     ports:
       {%+raw%}{% for port in {%endraw%}{{cookiecutter.service_name}}_docker_ports{%raw%} -%}{%endraw%}
       {%raw%}
@@ -28,6 +29,7 @@ services:
       {% endif -%}
       {%- endfor +%}
       {%endraw%}
+    {% endif %}
 
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -35,7 +37,7 @@ services:
       {%raw%}
       {% if volume != "" -%}
       - "{{volume}}"
-      {% endif -%}
+      {% endif %}
       {%- endfor %}
       {%endraw%}
       {%raw%}{% for volume in {%endraw%}{{cookiecutter.service_name}}_docker_volumes_extra{%raw%} -%}{%endraw%}
@@ -46,14 +48,21 @@ services:
       {%- endfor +%}
       {%endraw%}
 
-
-    {%- if cookiecutter.docker_cap_net_admin %}
     cap_add:
-      - NET_ADMIN
-    {% endif %}
+      {%- if cookiecutter.docker_capabilities._1 != "" %}
+      {% for _,cap in cookiecutter.docker_capabilities.items() +%}
+      {% if cap != "" %}
+      - {{cap}}
+      {%- endif %}
+      {% endfor %}
+      {% else %}{%raw%} []{%endraw%}{# the space before {} is important #}
+      {% endif %}
 
-
+{% if cookiecutter.docker_network_name == "host" %}
+    network_mode: "host"
+{% else +%}
 networks:
   default:
     name: "{{ var(cookiecutter.service_name+"_docker_network_name") }}"
     external: true
+{% endif %}
