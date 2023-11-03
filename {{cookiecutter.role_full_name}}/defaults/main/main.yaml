@@ -11,11 +11,11 @@
 {{cookiecutter.service_name}}_docker_command: "{{cookiecutter.docker_command}}"
 {% endif %}
 {{cookiecutter.service_name}}_docker_cpu_limit: "{{cookiecutter.docker_cpu_limit}}"
-{{cookiecutter.service_name}}_docker_image: "{{ var(cookiecutter.service_name+"_docker_repo") }}:{{ var(cookiecutter.service_name+"_docker_tag") }}"
+{{cookiecutter.service_name}}_docker_image: "{{ var(cookiecutter.service_name+"_docker_repo") }}:{{ var(cookiecutter.service_name+"_docker_image_tag") }}"
 {{cookiecutter.service_name}}_docker_mem_limit: "{{cookiecutter.docker_mem_limit}}"
 {{cookiecutter.service_name}}_docker_network_name: "{{cookiecutter.docker_network_name}}"
 {{cookiecutter.service_name}}_docker_repo: "{{cookiecutter.docker_repo}}"
-{{cookiecutter.service_name}}_docker_tag: "{{cookiecutter.docker_tag}}"
+{{cookiecutter.service_name}}_docker_image_tag: "{{cookiecutter.docker_image_tag}}"
 {{cookiecutter.service_name}}_home: "/opt/{{cookiecutter.service_full_name}}"
 {% if cookiecutter.http_port != "" %}
 {{cookiecutter.service_name}}_nginx_http_port: {{cookiecutter.http_port}}
@@ -33,6 +33,16 @@
 {{cookiecutter.service_name}}_unix_user_id: {{cookiecutter.unix_user_id}}
 {{cookiecutter.service_name}}_unix_user_name: "{{cookiecutter.unix_user_name}}"
 {{cookiecutter.service_name}}_unix_umask: "{{cookiecutter.unix_umask}}"
+
+{{cookiecutter.service_name}}_docker_devices:
+{%- if cookiecutter.docker_devices._1 != "" %}
+{% for _,dev in cookiecutter.docker_devices.items() %}
+{% if dev != "" +%}
+  - "{{dev.src}}:{{dev.dst}}"
+{%- endif %}
+{% endfor %}
+{% else %}{%raw%} []{%endraw%}{# the space before {} is important #}
+{% endif +%}
 
 # extra docker variables to set
 {{cookiecutter.service_name}}_docker_env:
@@ -61,7 +71,7 @@
 
 # extra docker volumes to mount
 {{cookiecutter.service_name}}_docker_volumes:
-{% for name,volume in cookiecutter.docker_volumes.items() %}
+{% for _,volume in cookiecutter.docker_volumes.items() %}
 {% if volume != "" %}
   - "{{volume.src}}:{{volume.dst}}"
 {% endif %}

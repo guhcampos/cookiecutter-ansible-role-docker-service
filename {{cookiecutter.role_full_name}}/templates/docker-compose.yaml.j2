@@ -9,6 +9,15 @@ services:
     image: "{{ var(cookiecutter.service_name+"_docker_image") }}"
     restart: unless-stopped
 
+    devices:
+      {%+raw%}{% for dev in {%endraw%}{{cookiecutter.service_name}}_docker_devices{%raw%} -%}{%endraw%}
+      {%raw%}
+      {% if dev != "" -%}
+      - "{{dev.src}}:{{dev.dst}}"
+      {% endif -%}
+      {%- endfor %}
+      {%endraw%}
+
     environment:
       - PUID={{ var(cookiecutter.service_name+"_unix_user_id") }}
       - PGID={{ var(cookiecutter.service_name+"_unix_group_id") }}
@@ -40,7 +49,7 @@ services:
       {% endif %}
       {%- endfor %}
       {%endraw%}
-      {%raw%}{% for volume in {%endraw%}{{cookiecutter.service_name}}_docker_volumes_extra{%raw%} -%}{%endraw%}
+      {%+raw%}{% for volume in {%endraw%}{{cookiecutter.service_name}}_docker_volumes_extra{%raw%} -%}{%endraw%}
       {%raw%}
       {% if volume != "" -%}
       - "{{volume.src}}:{{volume.dst}}"
@@ -53,14 +62,15 @@ services:
       {% for _,cap in cookiecutter.docker_capabilities.items() +%}
       {% if cap != "" %}
       - {{cap}}
-      {%- endif %}
-      {% endfor %}
-      {% else %}{%raw%} []{%endraw%}{# the space before {} is important #}
-      {% endif %}
+      {%- endif -%}
+      {%- endfor -%}
+      {%- else -%} []{# the space before {} is important #}
+      {%- endif -%}
 
 {% if cookiecutter.docker_network_name == "host" %}
     network_mode: "host"
-{% else +%}
+{% else -%}
+
 networks:
   default:
     name: "{{ var(cookiecutter.service_name+"_docker_network_name") }}"

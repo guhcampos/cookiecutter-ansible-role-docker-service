@@ -23,6 +23,13 @@
     },
     "docker_command": "",
     "docker_cpu_limit": "1",
+    "docker_devices": {
+        "_1": "",
+        "_2": "",
+        "_3": "",
+        "_4": "",
+        "_5": ""
+    },
     "docker_env": {
         "_1": "",
         "_2": "",
@@ -50,7 +57,7 @@
         "_5": ""
     },
     "docker_repo": "docker.io/busybox",
-    "docker_tag": "latest",
+    "docker_image_tag": "latest",
     "docker_volumes": {
         "_1": "",
         "_2": "",
