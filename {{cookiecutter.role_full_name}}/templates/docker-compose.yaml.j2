@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
 
     devices:
+      {%- if cookiecutter.docker_devices._1 != "" %}
       {%+raw%}{% for dev in {%endraw%}{{cookiecutter.service_name}}_docker_devices{%raw%} -%}{%endraw%}
       {%raw%}
       {% if dev != "" -%}
@@ -17,6 +18,8 @@ services:
       {% endif -%}
       {%- endfor %}
       {%endraw%}
+      {% else %} []{# the space before [] is important #}
+      {% endif %}
 
     environment:
       - PUID={{ var(cookiecutter.service_name+"_unix_user_id") }}
@@ -63,13 +66,13 @@ services:
       {% if cap != "" %}
       - {{cap}}
       {%- endif -%}
-      {%- endfor -%}
-      {%- else -%} []{# the space before {} is important #}
-      {%- endif -%}
+      {%- endfor %}
+      {% else %} []{# the space before [] is important #}
+      {% endif -%}
 
 {% if cookiecutter.docker_network_name == "host" %}
     network_mode: "host"
-{% else -%}
+{% else %}
 
 networks:
   default:

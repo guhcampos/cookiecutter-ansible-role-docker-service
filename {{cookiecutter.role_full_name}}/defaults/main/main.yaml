@@ -71,10 +71,13 @@
 
 # extra docker volumes to mount
 {{cookiecutter.service_name}}_docker_volumes:
+{% if cookiecutter.docker_volumes._1 != "" %}
 {% for _,volume in cookiecutter.docker_volumes.items() %}
 {% if volume != "" %}
   - "{{volume.src}}:{{volume.dst}}"
 {% endif %}
 {% endfor %}
+{% else %} {}{# the space before {} is important #}
+{% endif %}
 
 {{cookiecutter.service_name}}_docker_volumes_extra: {}
