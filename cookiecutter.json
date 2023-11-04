@@ -79,5 +79,6 @@
     "unix_group_name": "{{cookiecutter.service_name}}",
     "unix_umask": "027",
     "unix_user_id": "<UID>",
-    "unix_user_name": "{{cookiecutter.service_name}}"
+    "unix_user_name": "{{cookiecutter.service_name}}",
+    "unix_mode_config_dir": "0750"
 }

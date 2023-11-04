@@ -8,7 +8,7 @@
     path: "{%raw%}{{nginx_proxy_config_home}}{%endraw%}"
     owner: nginx
     group: nginx
-    mode: 0750
+    mode: "{{var('nginx_unix_mode_config_dir')}}"
     state: directory
 
 - name: template nginx config

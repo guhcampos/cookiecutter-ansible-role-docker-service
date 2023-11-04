@@ -33,6 +33,7 @@
 {{cookiecutter.service_name}}_unix_user_id: {{cookiecutter.unix_user_id}}
 {{cookiecutter.service_name}}_unix_user_name: "{{cookiecutter.unix_user_name}}"
 {{cookiecutter.service_name}}_unix_umask: "{{cookiecutter.unix_umask}}"
+{{cookiecutter.service_name}}_unix_mode_config_dir: "{{cookiecutter.unix_mode_config_dir}}"
 
 {{cookiecutter.service_name}}_docker_devices:
 {%- if cookiecutter.docker_devices._1 != "" %}
