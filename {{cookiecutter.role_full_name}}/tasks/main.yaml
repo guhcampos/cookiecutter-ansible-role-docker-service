@@ -67,11 +67,11 @@
 {% if cookiecutter.nginx_enabled -%}
 - ansible.builtin.include_tasks: "_nginx.yaml"
   tags: [nginx]
-{%- endif %}
+{% endif %}
 
-{%- for _,task in cookiecutter.ansible_extra_tasks.items() %}
-{%- if task != "" +%}
+{% for _,task in cookiecutter.ansible_extra_tasks.items() %}
+{% if task != "" %}
 - ansible.builtin.include_tasks: "{{task.file}}"
   tags: {{task.tags}}
 {% endif %}
-{% endfor %}
+{%- endfor %}
